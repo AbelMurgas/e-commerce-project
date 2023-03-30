@@ -8,18 +8,36 @@ const productSchema = new Schema(
       required: true,
     },
     description: {
-        type: String,
-        required: true,
+      type: String,
+      required: true,
     },
     imageUrl: {
       type: String,
       required: true,
     },
-    price : {
-      type: mongoose.Schema.Types.Decimal128,
-      get: value => parseFloat(value.toFixed(2)),
-      set: value => parseFloat(value.toFixed(2)),
-      required: true
+    category: {
+      type: String,
+      required: true,
+    },
+    price: {
+      type: Schema.Types.Decimal128,
+      min: 0.0,
+      max: 1,
+      scale: 2,
+      precision: 2,
+      required: true,
+    },
+    discount: {
+      type: Schema.Types.Decimal128,
+      min: 0.01,
+      max: 1,
+      scale: 2,
+      precision: 2,
+    },
+    amountInStock: {
+      type: Number,
+      min: 0,
+      required: true,
     },
   },
   { timestamps: true }
