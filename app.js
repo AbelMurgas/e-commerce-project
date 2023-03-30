@@ -12,9 +12,10 @@ import compression from "compression";
 import express from "express";
 import { v4 } from "uuid";
 import bodyParser from "body-parser";
-import helmet from "helmet"
+import helmet from "helmet";
 
 // --- Routes import ----
+import productRoutes from "./routes/product.js";
 
 const __filename = fileURLToPath(import.meta.url);
 
@@ -24,7 +25,6 @@ const app = express();
 
 app.use(helmet()); // Secure headers
 app.use(compression()); // Compressing data
-
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -63,7 +63,7 @@ app.use((req, res, next) => {
 });
 
 // --- Routes ---
-
+app.use("/products", productRoutes);
 
 // --- Internal error ---
 app.use((error, req, res, next) => {
@@ -81,7 +81,7 @@ mongoose
   )
   .then((result) => {
     app.listen(config.PORT || 3000, () => {
-      console.log(`server up: http://${config.HOST}:${config.PORT}`)
+      console.log(`server up: http://${config.HOST}:${config.PORT}`);
     });
   })
   .catch((err) => console.log(err));
