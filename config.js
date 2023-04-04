@@ -12,12 +12,10 @@ dotenv.config({
 });
 
 const config = {
-  NODE_ENV: process.env.NODE_ENV || "development",
+  NODE_ENV: process.env.NODE_ENV || "test",
   PORT: process.env.PORT || 3000,
   HOST: process.env.HOST || "localhost",
-  MONGO_USER: process.env.MONGO_USER,
-  MONGO_PASSWORD: process.env.MONGO_PASSWORD,
-  MONGO_DEFAULT_DATABASE: process.env.MONGO_DEFAULT_DATABASE,
+  MONGO_URI: `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.ssc1tcl.mongodb.net/${process.env.MONGO_DEFAULT_DATABASE}?retryWrites=true&w=majority`,
 };
 
 export default config;
