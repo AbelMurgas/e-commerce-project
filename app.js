@@ -1,11 +1,9 @@
 // --- default  library ---
-import path from "path";
-import { fileURLToPath } from "url";
 
 // --- internal library ---
 import config from "./config.js";
 
-// --- external library ----
+// --- external library ---
 import mongoose from "mongoose";
 import multer from "multer";
 import compression from "compression";
@@ -14,12 +12,12 @@ import { v4 } from "uuid";
 import bodyParser from "body-parser";
 import helmet from "helmet";
 
-// --- Routes import ----
+// --- Routes import ---
 import productRoutes from "./routes/product.js";
 
-const __filename = fileURLToPath(import.meta.url);
-
-const __dirname = path.dirname(__filename);
+// --- test ---
+import testConfig from "./config.test.js"
+const mongoUri = (process.env.NODE_ENV) ? config.MONGO_URI : testConfig.MONGO_URI;
 
 const app = express();
 
@@ -76,12 +74,14 @@ app.use((error, req, res, next) => {
 
 mongoose.set("strictQuery", true);
 mongoose
-  .connect(
-    `mongodb+srv://${config.MONGO_USER}:${config.MONGO_PASSWORD}@cluster0.ssc1tcl.mongodb.net/${config.MONGO_DEFAULT_DATABASE}?retryWrites=true&w=majority`
-  )
+  .connect(mongoUri)
   .then((result) => {
-    app.listen(config.PORT || 3000, () => {
-      console.log(`server up: http://${config.HOST}:${config.PORT}`);
-    });
+      app.listen(config.PORT || 3000, () => {
+        if (config.NODE_ENV !== "test"){
+          console.log(`server up: http://${config.HOST}:${config.PORT}`);
+        }
+      });
   })
   .catch((err) => console.log(err));
+
+export default app;

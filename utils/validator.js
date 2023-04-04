@@ -1,5 +1,7 @@
 import validator from "express-validator";
 const { body, param } = validator;
+import { Types } from 'mongoose';
+const ObjectId = Types.ObjectId;
 
 export const productInputValidator = [
   param("productId")
@@ -9,5 +11,4 @@ export const productInputValidator = [
       }
       return true;
     })
-    .withMessage("Incorrect id product"),
 ];
