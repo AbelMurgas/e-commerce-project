@@ -66,10 +66,7 @@ app.use("/products", productRoutes);
 // --- Internal error ---
 app.use((error, req, res, next) => {
   console.log(error);
-  const status = error.statusCode || 500;
-  const message = error.message;
-  const data = error.data;
-  res.status(status).json({ message: message, data: data });
+  res.status(500).json({ errors: "Internal Error from the server" });
 });
 
 mongoose.set("strictQuery", true);

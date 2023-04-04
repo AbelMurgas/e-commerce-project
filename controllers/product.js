@@ -10,9 +10,6 @@ export const getProducts = async (req, res, next) => {
     const products = await Product.find();
     res.status(201).json({ data: products });
   } catch (err) {
-    if (!err.statusCode) {
-      err.statusCode = 500;
-    }
     next(err);
   }
 };
@@ -22,16 +19,11 @@ export const getProduct = async (req, res, next) => {
   const errorsObject = validationResult(req);
   try {
     if (!errorsObject.isEmpty()) {
-      const error = new Error(objectErrorToString(errorsObject));
-      error.statusCode = 422;
-      throw error;
+      return res.status(400).json({ errors: errorsObject.array() });
     }
     const product = await Product.findById(productId);
     res.status(201).json({ data: product });
   } catch (err) {
-    if (!err.statusCode) {
-      err.statusCode = 500;
-    }
     next(err);
   }
 };
