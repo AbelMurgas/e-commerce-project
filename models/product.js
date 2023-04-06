@@ -22,7 +22,7 @@ const productSchema = new Schema(
     price: {
       type: Schema.Types.Decimal128,
       min: 0.0,
-      max: 1,
+      max: 10000,
       scale: 2,
       precision: 2,
       required: true,
@@ -33,6 +33,7 @@ const productSchema = new Schema(
       max: 1,
       scale: 2,
       precision: 2,
+      default: 0
     },
     amountInStock: {
       type: Number,
