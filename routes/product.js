@@ -1,6 +1,6 @@
 import express from "express";
 import { getProducts, getProduct, postProduct } from "../controllers/product.js";
-import { productInputValidator } from "../utils/validator.js";
+import { getProductValidator, postProductValidator } from "../utils/validator.js";
 
 const router = express.Router();
 
@@ -8,8 +8,8 @@ const router = express.Router();
 
 router.get("/", getProducts);
 
-router.get("/:productId", productInputValidator, getProduct);
+router.get("/:productId", getProductValidator, getProduct);
 
-router.post("/", postProduct);
+router.post("/", postProductValidator, postProduct);
 
 export default router;
