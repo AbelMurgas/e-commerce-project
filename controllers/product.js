@@ -35,12 +35,13 @@ export const postProduct = async (req, res, next) => {
   const price = req.body.price;
   const discount = req.body.discount;
   const amountInStock = req.body.amountInStock;
-  const normalizedPath = req.file.path.replace(/\\/g, '/');
   const errorsObject = validationResult(req);
   try {
     if (!errorsObject.isEmpty()) {
+      file.clearImage(req.file.path)
       return res.status(400).json({ errors: errorsObject.array() });
     }
+    const normalizedPath = req.file.path.replace(/\\/g, '/');
     const product = new Product({
       title: title,
       description: description,
@@ -53,7 +54,7 @@ export const postProduct = async (req, res, next) => {
     const productCreated = await product.save()
     return res.status(201).json({ product: productCreated });
   } catch (err) {
+    file.clearImage(req.file.path)
     next(err);
   }
-  
 };
