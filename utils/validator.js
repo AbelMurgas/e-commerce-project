@@ -15,9 +15,16 @@ export const getProductValidator = [
 
 export const postProductValidator = [
   body("title")
-    .exists().withMessage("Title is required")
+    .exists()
+    .withMessage("Title is required")
     .isLength({ min: 5, max: 50 })
-    .withMessage("Title must have a length between 5 and 50 characters"),
+    .withMessage("Title must have a length between 5 and 50 characters")
+    .custom(async (value, { req }) => {
+      const product = await Product.findOne({ title: value });
+      if (product) {
+        throw Error("This product already exist");
+      }
+    }),
   body("description")
     .exists()
     .withMessage("Description is required")
@@ -46,11 +53,11 @@ export const postProductValidator = [
 
 // TODO: Validate if product id exist in update product
 export const putProductValidator = [
-  param("productId").custom( async (value, { req }) => {
+  param("productId").custom(async (value, { req }) => {
     if (!ObjectId.isValid(value)) {
       throw new Error("Invalid product ID");
     }
-    const productMatchId = await Product.findById(value)
+    const productMatchId = await Product.findById(value);
     if (!productMatchId) {
       throw new Error("Product not exist");
     }
@@ -74,10 +81,4 @@ export const putProductValidator = [
     .optional()
     .isFloat({ min: 0, max: 1 })
     .withMessage("Price must be between 0 and 1"),
-  body("image").custom((value, { req }) => {
-    if (!req.file) {
-      throw new Error("Image not receive");
-    }
-    return true;
-  }),
 ];
